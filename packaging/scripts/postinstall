@@ -1,0 +1,38 @@
+#!/bin/bash
+# Fix ownership and modes, create the log dir, and load the new daemon. A
+# package install is a failure unless launchd accepts the new job and it runs.
+set -eu
+SUPPORT="/Library/Application Support/GoToSleep"
+DAEMON_PLIST="/Library/LaunchDaemons/com.rubberducking.gotosleep.daemon.plist"
+DAEMON_SERVICE="system/com.rubberducking.gotosleep.daemon"
+AGENT_PLIST="/Library/LaunchAgents/com.rubberducking.gotosleep.agent.plist"
+chown -R root:wheel "$SUPPORT" "$DAEMON_PLIST" \
+  "$AGENT_PLIST" /Applications/GoToSleep.app
+chmod 0755 "$SUPPORT" "$SUPPORT/bin"
+chmod 0755 "$SUPPORT/bin/gotosleepd" "$SUPPORT/bin/gotosleep-lock"
+chmod 0644 "$DAEMON_PLIST" "$AGENT_PLIST"
+mkdir -p /Library/Logs/GoToSleep
+chown root:wheel /Library/Logs/GoToSleep
+chmod 0755 /Library/Logs/GoToSleep
+
+# Retry the preinstall bootout once so a stale loaded job cannot make a
+# successful upgrade keep running the old executable.
+/bin/launchctl bootout "$DAEMON_SERVICE" 2>/dev/null || true
+if ! /bin/launchctl bootstrap system "$DAEMON_PLIST"; then
+  echo "Go To Sleep: failed to bootstrap $DAEMON_SERVICE" >&2
+  exit 1
+fi
+
+running=0
+for _ in 1 2 3 4 5 6 7 8 9 10; do
+  if /bin/launchctl print "$DAEMON_SERVICE" 2>/dev/null | /usr/bin/grep -q 'state = running'; then
+    running=1
+    break
+  fi
+  /bin/sleep 1
+done
+if [ "$running" -ne 1 ]; then
+  echo "Go To Sleep: $DAEMON_SERVICE did not reach state = running" >&2
+  exit 1
+fi
+exit 0

@@ -1,0 +1,12 @@
+#!/bin/bash
+# Refuse a foreign app before stopping the currently installed public jobs.
+set -eu
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd -P)"
+"$SCRIPT_DIR/check-existing-app" "/Applications/GoToSleep.app"
+
+/bin/launchctl bootout system/com.rubberducking.gotosleep.daemon 2>/dev/null || true
+for uid in $(/usr/bin/who | /usr/bin/awk '{print $1}' | /usr/bin/sort -u | while read u; do /usr/bin/id -u "$u" 2>/dev/null || true; done); do
+  /bin/launchctl bootout "gui/$uid/com.rubberducking.gotosleep.agent" 2>/dev/null || true
+done
+exit 0

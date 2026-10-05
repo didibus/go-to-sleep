@@ -1,0 +1,30 @@
+#!/bin/bash
+# Accept an absent app or an app with the exact public bundle identity.
+set -eu
+
+APP="${1-}"
+EXPECTED_ID="com.rubberducking.gotosleep"
+[ -n "$APP" ] || {
+  echo "Go To Sleep: existing-app check requires an app path" >&2
+  exit 2
+}
+
+if [ ! -e "$APP" ] && [ ! -L "$APP" ]; then
+  exit 0
+fi
+if [ ! -d "$APP" ]; then
+  echo "Go To Sleep: refusing to replace a non-app path at $APP" >&2
+  exit 1
+fi
+
+INFO="$APP/Contents/Info.plist"
+if [ ! -f "$INFO" ]; then
+  echo "Go To Sleep: refusing to replace an app without a readable Info.plist" >&2
+  exit 1
+fi
+
+ACTUAL_ID="$(/usr/bin/plutil -extract CFBundleIdentifier raw -o - "$INFO" 2>/dev/null || true)"
+if [ "$ACTUAL_ID" != "$EXPECTED_ID" ]; then
+  echo "Go To Sleep: refusing to replace an app with bundle identifier ${ACTUAL_ID:-<unreadable>}" >&2
+  exit 1
+fi

@@ -1,0 +1,27 @@
+{;; Release builds and tests use the same supported Jolt runtime.
+ :jolt/min-version "0.8.16"
+
+ :paths ["src"]
+
+ ;; glitter-uikit (AppKit renderer) + glitter-core (reconciler). Never the full
+ ;; `glitter` package: it declares GTK4 under :jolt/native, which jolt inherits.
+ ;; Pins copied from glitter-uikit's own deps.edn.
+ :deps {io.github.jlt-commons/glitter-uikit
+        {:git/url "https://github.com/jlt-commons/glitter-uikit"
+         :git/sha "5357d0c9968bd14ffb4c67595ed0128e869863d5"}
+        io.github.jlt-commons/glitter-core
+        {:git/url "https://github.com/jlt-commons/glitter-core"
+         :git/sha "4fba1ddb069be798adc1ef0c028e6e21a21ec9f3"}}
+
+ :aliases {:test  {:extra-paths ["test"]
+                   :main-opts ["-m" "gotosleep.test-runner" "test" "_test.clj"]}
+           ;; headless checks against the real OS; never locks, never needs sudo
+           :smoke {:extra-paths ["test" "smoke"]
+                   :main-opts ["-m" "gotosleep.test-runner" "smoke" "_smoke.clj"]}
+           :e2e   {:extra-paths ["dev/e2e"]
+                   :main-opts ["-m" "gotosleep.e2e"]}}
+
+ :tasks {test  "jolt -M:test"
+         smoke "jolt -M:smoke"
+         stage "bash packaging/build.sh"
+         pkg   "bash packaging/pkg.sh"}}

@@ -1,0 +1,9 @@
+target/
+*.build/
+.cpcache/
+.jolt/
+*.log
+!/dev/**/*.log.example
+.DS_Store
+.nrepl-port
+.claude/settings.local.json

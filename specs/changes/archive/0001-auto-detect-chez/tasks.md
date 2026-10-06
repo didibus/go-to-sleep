@@ -6,8 +6,8 @@
 | --- | --- |
 | Estimate | 0.5 person-day — focused shell discovery, regression coverage, documentation, and package verification (2026-10-06) |
 | Started | 2026-10-06 |
-| Implementation accepted | — |
-| Completed | — |
+| Implementation accepted | didibus (repository owner), 2026-10-06 — `0b827a90869c498ac74397605af2c66b47ed0dc8` |
+| Completed | 2026-10-06 |
 | Days worked | 2026-10-06 |
 
 Run
@@ -38,13 +38,14 @@ appears only after everything it depends on.
 
 ## Validation and acceptance
 
-- [ ] Hand the implementation to the human, with each acceptance criterion and its evidence.
-- [ ] Apply requested corrections as new tasks above, and rerun the affected checks.
-- [ ] Record the approver, date, and exact implementation commit in the Progress table; set the phase to
+- [x] Hand the implementation to the human, with each acceptance criterion and its evidence.
+- [x] Apply requested corrections as new tasks above, and rerun the affected checks. No corrections
+      were requested.
+- [x] Record the approver, date, and exact implementation commit in the Progress table; set the phase to
       Accepted.
 
 ## Current-spec fold and completion
 
-- [ ] Fold the accepted implementation into `specs/current/`, without adding behavior.
-- [ ] Commit code and current specs together; confirm the result matches the accepted commit.
-- [ ] Record the completion date, set the phase to Complete, and archive.
+- [x] Fold the accepted implementation into `specs/current/`, without adding behavior.
+- [x] Commit code and current specs together; confirm the result matches the accepted commit.
+- [x] Record the completion date, set the phase to Complete, and archive.

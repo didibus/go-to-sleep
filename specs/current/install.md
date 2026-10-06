@@ -18,8 +18,14 @@ generated bundle, package, artifact, checksum, and release metadata all derive f
 ## Build
 
 Release builds require Jolt 0.8.16, Apple Clang, and the Chez Scheme 10.4.1 `tarm64osx` development
-directory. `JOLT_CHEZ_CSV` must identify that directory, and its `chez` executable must resolve first
-through `PATH`.
+directory. The build normally discovers `chez` from `PATH`, derives and validates the matching
+development directory, and exports the canonical values internally for Jolt's signable builds.
+`JOLT_CHEZ` may select a nonstandard interpreter, while `JOLT_CHEZ_CSV` may directly select a
+nonstandard development directory. A normal Homebrew installation requires no environment exports.
+
+Toolchain validation requires executable `chez`, version 10.4.1, `scheme.h`, `libkernel.a`,
+`petite.boot`, and `scheme.boot`. A missing, incomplete, or incompatible toolchain fails before
+existing staging output is replaced.
 
 ```sh
 cd "$(git rev-parse --show-toplevel)"

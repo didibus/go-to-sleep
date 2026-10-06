@@ -3,7 +3,7 @@
 | Field | Value |
 | --- | --- |
 | ID | go-to-sleep/0001 |
-| Phase | Verified |
+| Phase | Complete |
 | Approved by | didibus (repository owner), 2026-10-06 |
 | Approved revision | `e29846741b910d8daca308cc48c01b2f6d7c03ef` |
 

@@ -5,17 +5,18 @@ boundary.
 
 ## Resume context
 
-- **Phase and revision** — Verified; approved RFC revision
-  `e29846741b910d8daca308cc48c01b2f6d7c03ef`.
-- **Branch** — `rfc/0001-auto-detect-chez`; implementation commit
+- **Phase and revision** — Complete; approved RFC revision
+  `e29846741b910d8daca308cc48c01b2f6d7c03ef`, accepted implementation
   `0b827a90869c498ac74397605af2c66b47ed0dc8`.
+- **Branch** — `rfc/0001-auto-detect-chez`; completion integration is being committed.
 - **Done** — T1–T3. Toolchain discovery, focused regressions, documentation, a real no-export
-  package build, the complete package audit, the full test suite, and provenance checks pass at the
-  implementation commit.
-- **In progress** — implementation handoff.
-- **Blocked** — accepting the implementation requires repository-owner approval.
-- **Next action** — obtain owner acceptance of
-  `0b827a90869c498ac74397605af2c66b47ed0dc8`, then fold `specs/current/install.md`.
+  package build, the complete package audit, the full test suite, and provenance checks passed at
+  the implementation commit. The repository owner accepted that commit, and its behavior is folded
+  into `specs/current/install.md`.
+- **In progress** — archive and completion commit.
+- **Blocked** — none.
+- **Next action** — commit the current-spec fold and archive, record that integration commit, then
+  request separate approval to merge the RFC branch into `main`.
 
 ## Discoveries and uncertainty
 
@@ -35,6 +36,8 @@ boundary.
   provenance.
 - On 2026-10-06, the repository owner approved RFC revision
   `e29846741b910d8daca308cc48c01b2f6d7c03ef`.
+- On 2026-10-06, the repository owner accepted implementation commit
+  `0b827a90869c498ac74397605af2c66b47ed0dc8`.
 - The proposed normal path is installation plus `jolt pkg`; explicit environment configuration is
   retained only for nonstandard installations.
 

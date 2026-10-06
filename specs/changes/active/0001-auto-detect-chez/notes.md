@@ -7,13 +7,15 @@ boundary.
 
 - **Phase and revision** — Verified; approved RFC revision
   `e29846741b910d8daca308cc48c01b2f6d7c03ef`.
-- **Branch** — `rfc/0001-auto-detect-chez`; dirty with the verified implementation candidate.
+- **Branch** — `rfc/0001-auto-detect-chez`; implementation commit
+  `0b827a90869c498ac74397605af2c66b47ed0dc8`.
 - **Done** — T1–T3. Toolchain discovery, focused regressions, documentation, a real no-export
-  package build, the complete package audit, the full test suite, and provenance checks pass.
+  package build, the complete package audit, the full test suite, and provenance checks pass at the
+  implementation commit.
 - **In progress** — implementation handoff.
-- **Blocked** — committing and accepting the implementation require repository-owner approval.
-- **Next action** — obtain approval to commit the implementation candidate, then present that exact
-  commit for acceptance before folding `specs/current/install.md`.
+- **Blocked** — accepting the implementation requires repository-owner approval.
+- **Next action** — obtain owner acceptance of
+  `0b827a90869c498ac74397605af2c66b47ed0dc8`, then fold `specs/current/install.md`.
 
 ## Discoveries and uncertainty
 
@@ -40,17 +42,21 @@ boundary.
 
 - Imported baseline: `bash test/packaging_toolchain.sh` failed at PATH discovery with the old
   mandatory-`JOLT_CHEZ_CSV` error, proving the regression test exercised the intended behavior.
-- Dirty implementation candidate: `bash test/packaging_toolchain.sh` passed PATH discovery,
+- Implementation commit `0b827a90869c498ac74397605af2c66b47ed0dc8`:
+  `bash test/packaging_toolchain.sh` passed PATH discovery,
   `JOLT_CHEZ`, `JOLT_CHEZ_CSV`, missing-toolchain, incomplete-directory, and wrong-version cases.
-- Dirty implementation candidate:
+- Implementation commit `0b827a90869c498ac74397605af2c66b47ed0dc8`:
   `env -u JOLT_CHEZ -u JOLT_CHEZ_CSV jolt pkg` exited 0, built and strictly verified all three
   payload executables, and wrote the package and checksum without manual environment exports.
-- Dirty implementation candidate: `bash dev/check-pkg.sh` passed the complete package audit,
+- Implementation commit `0b827a90869c498ac74397605af2c66b47ed0dc8`:
+  `bash dev/check-pkg.sh` passed the complete package audit,
   including strict signatures, package structure, checksum, pre-mutation missing-toolchain failure,
   and the focused toolchain cases.
-- Dirty implementation candidate: `jolt -M:test` ran 211 tests and 6,862 assertions with zero
-  failures or errors and zero namespace load failures.
-- Dirty implementation candidate: `bash dev/check-provenance.sh`, Bash syntax checks,
-  `git diff --check`, and `rfc.py check --verbose` passed.
-- Dirty implementation candidate: explicit private-provenance scans over working-tree paths,
-  content, and existing Git metadata returned no matches.
+- Implementation commit `0b827a90869c498ac74397605af2c66b47ed0dc8`: `jolt -M:test` ran
+  211 tests and 6,862 assertions with zero failures or errors and zero namespace load failures.
+- Implementation commit `0b827a90869c498ac74397605af2c66b47ed0dc8`:
+  `bash dev/check-provenance.sh`, Bash syntax checks, `git diff --check`, `git fsck --full --strict`,
+  and `rfc.py check --verbose` passed.
+- Implementation commit `0b827a90869c498ac74397605af2c66b47ed0dc8`: explicit
+  private-provenance scans over working-tree paths, content, reachable Git objects, and Git metadata
+  returned no matches.

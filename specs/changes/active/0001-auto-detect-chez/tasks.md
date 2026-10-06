@@ -18,20 +18,21 @@ if missing. See the skill's `reference/tracking.md`.
 ## Design
 
 - [x] Interview the human and get the intent brief confirmed.
-- [ ] Draft the RFC, resolve its open design questions, and get human approval of the revision.
+- [x] Draft the RFC, resolve its open design questions, and get human approval of revision
+      `e29846741b910d8daca308cc48c01b2f6d7c03ef`.
 
 ## Implementation
 
 Every task has an ID, an `after` list, and a checkable done condition, and traces to the RFC. A task
 appears only after everything it depends on.
 
-- [ ] T1 — Add focused discovery, explicit-override, missing-toolchain, incomplete-directory, and
+- [x] T1 — Add focused discovery, explicit-override, missing-toolchain, incomplete-directory, and
       wrong-version regression coverage. after: — · done when: each acceptance path has a test that
       fails against the imported baseline for the intended reason.
-- [ ] T2 — Implement toolchain discovery and update public build documentation. after: T1 · done
+- [x] T2 — Implement toolchain discovery and update public build documentation. after: T1 · done
       when: routine builds need no environment exports, explicit overrides remain supported, failure
       is pre-mutation and actionable, and focused tests pass.
-- [ ] T3 — Run every required check and record the commands and output; validate each acceptance
+- [x] T3 — Run every required check and record the commands and output; validate each acceptance
       criterion; set the phase to Verified. after: T2 · done when: every criterion has evidence in
       `notes.md`.
 

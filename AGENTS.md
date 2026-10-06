@@ -67,8 +67,9 @@ remains deferred and must never be described as passed.
 - The UI uses `glitter-uikit` and `glitter-core`. Do not add the GTK `glitter` package.
 - Native macOS APIs use `jolt.ffi`.
 - `jolt.process`, `jolt.fs`, and `clojure.edn` are built in.
-- Release builds require Apple Clang and Chez Scheme 10.4.1's `tarm64osx` development directory,
-  selected through `JOLT_CHEZ_CSV` and `PATH`.
+- Release builds require Apple Clang and Chez Scheme 10.4.1's `tarm64osx` development directory.
+  Normal installations are discovered from `chez` on `PATH`; `JOLT_CHEZ_CSV` is an override for a
+  nonstandard installation.
 
 The app parses TZif data from `/var/db/timezone/zoneinfo` itself. Do not replace it with the
 transitive time library without proving DST and unknown-zone behavior.

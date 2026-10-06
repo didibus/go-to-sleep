@@ -459,10 +459,13 @@ fi
 
 /bin/mkdir -p "$ROOT/target"
 NEGATIVE_STAGE="$(/usr/bin/mktemp -d "$ROOT/target/.check-preflight.XXXXXX")"
+PREFLIGHT_BIN="$TMP/preflight-bin"
+/bin/mkdir -p "$PREFLIGHT_BIN"
+/bin/ln -s "$(command -v jolt)" "$PREFLIGHT_BIN/jolt"
 printf 'keep\n' > "$NEGATIVE_STAGE/sentinel"
 set +e
-/usr/bin/env -u JOLT_CHEZ_CSV \
-  PATH="/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin" \
+/usr/bin/env -u JOLT_CHEZ -u JOLT_CHEZ_CSV \
+  PATH="$PREFLIGHT_BIN:/usr/bin:/bin:/usr/sbin:/sbin" \
   /bin/bash "$ROOT/packaging/build.sh" --version "$VERSION" "$NEGATIVE_STAGE" \
   >"$TMP/preflight-negative.out" 2>&1
 preflight_status=$?
@@ -471,7 +474,10 @@ check "missing Chez preflight fails before a signable build" test "$preflight_st
 check "failed toolchain preflight preserves the existing staging path" \
   test "$(/bin/cat "$NEGATIVE_STAGE/sentinel")" = keep
 check "missing Chez preflight explains the requirement" \
-  /usr/bin/grep -Fq 'JOLT_CHEZ_CSV must name' "$TMP/preflight-negative.out"
+  /usr/bin/grep -Fq 'install Chez Scheme 10.4.1 or set JOLT_CHEZ_CSV' \
+    "$TMP/preflight-negative.out"
+check "focused packaging toolchain cases pass" \
+  /bin/bash "$ROOT/test/packaging_toolchain.sh"
 
 canonical_release="$(canonical_path "$ROOT/target/release")"
 actual_release="$(canonical_path "$RELEASE_DIR")"

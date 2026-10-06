@@ -35,8 +35,10 @@ query_release_version() {
 
 require_signable_toolchain() {
   local chez_dir
+  local chez_executable
+  local chez_parent
+  local chez_prefix
   local expected_chez
-  local resolved_chez
   local clang_path
   local jolt_version
 
@@ -45,27 +47,44 @@ require_signable_toolchain() {
   [ "$jolt_version" = "jolt v0.8.16" ] ||
     packaging_die "Jolt 0.8.16 is required (found: $jolt_version)"
 
-  [ -n "${JOLT_CHEZ_CSV-}" ] ||
-    packaging_die "JOLT_CHEZ_CSV must name the Chez 10.4.1 tarm64osx development directory"
-  [ -d "$JOLT_CHEZ_CSV" ] ||
-    packaging_die "JOLT_CHEZ_CSV is not a directory: $JOLT_CHEZ_CSV"
-  chez_dir="$(canonical_path "$JOLT_CHEZ_CSV")"
+  if [ -n "${JOLT_CHEZ_CSV-}" ]; then
+    [ -d "$JOLT_CHEZ_CSV" ] ||
+      packaging_die "JOLT_CHEZ_CSV must name a Chez 10.4.1 tarm64osx development directory"
+    chez_dir="$(canonical_path "$JOLT_CHEZ_CSV")"
+  else
+    if [ -n "${JOLT_CHEZ-}" ]; then
+      chez_executable="$(command -v "$JOLT_CHEZ" 2>/dev/null || true)"
+    else
+      chez_executable="$(command -v chez 2>/dev/null || true)"
+    fi
+    [ -n "$chez_executable" ] ||
+      packaging_die "install Chez Scheme 10.4.1 or set JOLT_CHEZ_CSV to its tarm64osx development directory"
+    chez_executable="$(canonical_path "$chez_executable")"
+    chez_parent="$(dirname "$chez_executable")"
+    if [ -f "$chez_parent/scheme.h" ] && [ -f "$chez_parent/libkernel.a" ]; then
+      chez_dir="$chez_parent"
+    else
+      chez_prefix="$(dirname "$chez_parent")"
+      chez_dir="$chez_prefix/lib/csv10.4.1/tarm64osx"
+    fi
+    [ -d "$chez_dir" ] ||
+      packaging_die "could not find the Chez 10.4.1 tarm64osx development directory; set JOLT_CHEZ_CSV explicitly"
+    chez_dir="$(canonical_path "$chez_dir")"
+  fi
   expected_chez="$chez_dir/chez"
 
   [ -x "$expected_chez" ] ||
-    packaging_die "JOLT_CHEZ_CSV/chez is missing or not executable"
-  for required_file in scheme.h petite.boot scheme.boot; do
+    packaging_die "the Chez 10.4.1 development directory has no executable chez"
+  for required_file in scheme.h libkernel.a petite.boot scheme.boot; do
     [ -f "$chez_dir/$required_file" ] ||
-      packaging_die "JOLT_CHEZ_CSV/$required_file is missing"
+      packaging_die "the Chez 10.4.1 development directory is missing $required_file"
   done
   [ "$("$expected_chez" --version 2>&1)" = "10.4.1" ] ||
     packaging_die "Chez Scheme 10.4.1 is required"
 
-  resolved_chez="$(command -v chez 2>/dev/null || true)"
-  [ -n "$resolved_chez" ] ||
-    packaging_die "chez must resolve through PATH"
-  [ "$(canonical_path "$resolved_chez")" = "$expected_chez" ] ||
-    packaging_die "PATH must resolve chez from JOLT_CHEZ_CSV"
+  JOLT_CHEZ_CSV="$chez_dir"
+  JOLT_CHEZ="$expected_chez"
+  export JOLT_CHEZ_CSV JOLT_CHEZ
 
   clang_path="$(command -v clang 2>/dev/null || true)"
   [ -n "$clang_path" ] || packaging_die "Apple Clang is required"

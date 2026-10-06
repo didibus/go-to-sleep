@@ -3,9 +3,9 @@
 | Field | Value |
 | --- | --- |
 | ID | go-to-sleep/0001 |
-| Phase | In Review |
-| Approved by | — |
-| Approved revision | — |
+| Phase | Verified |
+| Approved by | didibus (repository owner), 2026-10-06 |
+| Approved revision | `e29846741b910d8daca308cc48c01b2f6d7c03ef` |
 
 Progress, estimates, day counts, and implementation acceptance live in `tasks.md`, not here.
 

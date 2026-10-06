@@ -102,18 +102,16 @@ Homebrew provides the normal Chez Scheme installation:
 cd "$(git rev-parse --show-toplevel)"
 brew install chezscheme
 xcode-select --install
-export JOLT_CHEZ_CSV="$(brew --prefix chezscheme)/lib/csv10.4.1/tarm64osx"
-export PATH="$JOLT_CHEZ_CSV:$PATH"
-test -x "$JOLT_CHEZ_CSV/chez"
-test -f "$JOLT_CHEZ_CSV/scheme.h"
-test -f "$JOLT_CHEZ_CSV/petite.boot"
-test -f "$JOLT_CHEZ_CSV/scheme.boot"
+command -v chez
+chez --version
 xcrun --find clang
 jolt --version
 ```
 
-`JOLT_CHEZ_CSV` must name that exact development directory, and its `chez` executable must also be
-resolvable through `PATH`. The build preflight rejects missing or incompatible prerequisites.
+The build discovers `chez` from `PATH` and validates its matching development directory. A
+nonstandard installation may set `JOLT_CHEZ_CSV` to the exact `tarm64osx` development directory;
+routine Homebrew builds need no environment exports. The build preflight rejects missing or
+incompatible prerequisites before replacing staging output.
 
 Run the automated checks:
 

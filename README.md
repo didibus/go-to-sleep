@@ -3,9 +3,8 @@
 Go To Sleep is a small menu-bar app that enforces a weekly bedtime schedule. During a scheduled
 sleep block, it locks the current macOS session and immediately locks it again after an unlock.
 
-Version 0.1.0 is an early release for Apple silicon (`arm64`) Macs running macOS 26 or later. It has
-no x86_64 build and no support promise for older macOS releases. The complete installed reboot/login
-enforcement acceptance sequence has not yet been run.
+Version 0.1.0 is for Apple silicon (`arm64`) Macs running macOS 26 or later. It has
+no x86_64 build and no support promise for older macOS releases.
 
 ## Understand enforcement before installing
 
